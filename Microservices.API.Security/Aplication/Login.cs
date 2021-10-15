@@ -6,6 +6,7 @@ using Microservices.API.Security.Core.Entities;
 using Microservices.API.Security.Core.Persistence;
 using Microservices.API.Security.Infrastructure.JwtLogic;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,10 +55,12 @@ namespace Microservices.API.Security.Aplication
                 }
 
                 var result = await sigInManager.CheckPasswordSignInAsync(validationUser, request.Password, false);
+                var resultRoles = await userManager.GetRolesAsync(validationUser);
+                var listRoles = new List<string>(resultRoles);
                 if (result.Succeeded)
                 {
                     var userDto = mapper.Map<Users, UserDto>(validationUser);
-                    userDto.Token = jwtGenerator.CreateToken(validationUser);
+                    userDto.Token = jwtGenerator.CreateToken(validationUser, listRoles);
                     return userDto;
                 }
 

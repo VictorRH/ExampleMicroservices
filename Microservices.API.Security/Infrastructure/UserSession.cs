@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Microservices.API.Security.Infrastructure
 {
@@ -16,7 +14,7 @@ namespace Microservices.API.Security.Infrastructure
         }
         public string GetUserSession()
         {
-            var userName = httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == "username")?.Value;
+            var userName = httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
             return userName;
         }
     }

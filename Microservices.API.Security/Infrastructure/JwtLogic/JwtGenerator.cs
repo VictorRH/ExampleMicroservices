@@ -12,15 +12,22 @@ namespace Microservices.API.Security.Infrastructure.JwtLogic
     {
 
 
-        public string CreateToken(Users users)
+        public string CreateToken(Users users,List<string> rols )
         {
             var claims = new List<Claim>
             {
-                new Claim("username", users.UserName)
+                new Claim(JwtRegisteredClaimNames.NameId, users.UserName)
             };
+            if (rols != null)
+            {
+                foreach (var rol in rols)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, rol));
+                }
 
+            }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("C7q3FBCJZq0bIRRH0Dq4lxWuBipEBkHXxd"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is secret password for jwt in example microservices"));
             var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescription = new SecurityTokenDescriptor

@@ -8,7 +8,7 @@ namespace Microservices.API.Security.Infrastructure.JwtLogic
 {
     public interface IJwtGenerator
     {
-        string CreateToken(Users users);
+        string CreateToken(Users users, List<string>rols);
 
     }
 }
